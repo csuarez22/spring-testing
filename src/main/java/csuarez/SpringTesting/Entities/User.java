@@ -1,0 +1,94 @@
+package csuarez.SpringTesting.Entities;
+
+import jakarta.persistence.*;
+
+import java.time.LocalDate;
+
+@Entity
+@Table (name = "users")
+public class User {
+    @Id
+    private String username;
+
+    @Column(name = "first_name")
+    private String firstname;
+    @Column(name = "last_name")
+    private String lastname;
+    @Column(name = "date_of_birth", columnDefinition = "DATE")
+    private LocalDate dateOfBirth;
+    private String email;
+    private String address;
+
+    @OneToOne(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ShoppingCart cart;
+
+    public User() {
+        super();
+    }
+
+    public User(String username, String firstname, String lastname, LocalDate dateOfBirth, String email, String address) {
+        super();
+        this.username = username;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.address = address;
+    }
+
+    public ShoppingCart getCart() {
+        return cart;
+    }
+
+    public void setCart(ShoppingCart cart) {
+        this.cart = cart;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+}

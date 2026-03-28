@@ -1,8 +1,8 @@
 package csuarez.SpringTesting.Logic;
 
-import csuarez.SpringTesting.Entities.Users;
+import csuarez.SpringTesting.Entities.User;
 
 public interface UserInterface {
-    String createUser(Users user);
-    Users getByUsername(String username);
+    String createUser(User user);
+    User getByUsername(String username);
 }

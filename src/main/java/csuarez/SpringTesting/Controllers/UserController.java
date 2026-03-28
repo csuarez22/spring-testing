@@ -1,6 +1,6 @@
 package csuarez.SpringTesting.Controllers;
 
-import csuarez.SpringTesting.Entities.Users;
+import csuarez.SpringTesting.Entities.User;
 import csuarez.SpringTesting.Logic.UserLogic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +15,7 @@ public class UserController {
     private UserLogic service;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createNewUser(@RequestBody Users user) {
+    public ResponseEntity<?> createNewUser(@RequestBody User user) {
         return new ResponseEntity<>(service.createUser(user), HttpStatus.OK);
     }
 
