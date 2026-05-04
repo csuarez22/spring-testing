@@ -14,13 +14,6 @@ public class UserLogic implements UserInterface {
     private UserRepo userRepo;
 
     @Override
-    public String createUser(User user) {
-        user.setDateOfBirth(LocalDate.now());
-        userRepo.save(user);
-        return "User created.";
-    }
-
-    @Override
     public User getByUsername(String username) {
         return userRepo.findByUsername(username);
     }
