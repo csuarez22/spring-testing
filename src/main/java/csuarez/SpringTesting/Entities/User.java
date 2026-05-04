@@ -25,7 +25,7 @@ public class User implements UserDetails {
         super();
     }
 
-    public User(String username, String firstname, String lastname, LocalDate dateOfBirth, String email, String address, String password) {
+    public User(String username, LocalDate dateOfBirth, String email, String address, String password) {
         this.username = username;
         this.dateOfBirth = dateOfBirth;
         this.email = email;

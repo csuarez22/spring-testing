@@ -14,11 +14,6 @@ public class UserController {
     @Autowired
     private UserLogic service;
 
-    @PostMapping("/create")
-    public ResponseEntity<?> createNewUser(@RequestBody User user) {
-        return new ResponseEntity<>(service.createUser(user), HttpStatus.OK);
-    }
-
     @GetMapping("/findUser/{username}")
     public ResponseEntity<?> createNewUser(@PathVariable String username) {
         return new ResponseEntity<>(service.getByUsername(username), HttpStatus.OK);
