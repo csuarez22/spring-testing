@@ -51,8 +51,6 @@ public class AuthController {
         }
         User user = new User(
                 request.getUsername(),
-                request.getFirstname(),
-                request.getLastname(),
                 request.getDateOfBirth(),
                 request.getEmail(),
                 request.getAddress(),
