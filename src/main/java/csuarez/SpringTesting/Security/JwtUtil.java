@@ -21,11 +21,23 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private long expiration;
 
-    public String generateToken(UserDetails userDetails) {
+    @Value("${jwt.refresh-expiration}")
+    private long refreshExpiration;
+
+    public String generateAccessToken(UserDetails userDetails) {
+        return buildToken(userDetails, expiration, "access");
+    }
+
+    public String generateRefreshToken(UserDetails userDetails) {
+        return buildToken(userDetails, refreshExpiration, "refresh");
+    }
+
+    private String buildToken(UserDetails userDetails, long expirationMs, String type) {
         return Jwts.builder()
                 .subject(userDetails.getUsername())
+                .claim("type", type)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .expiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(getSigningKey())
                 .compact();
     }
@@ -35,7 +47,14 @@ public class JwtUtil {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        return extractUsername(token).equals(userDetails.getUsername()) && !isTokenExpired(token);
+        return "access".equals(extractClaim(token, c -> c.get("type", String.class)))
+                && extractUsername(token).equals(userDetails.getUsername())
+                && !isTokenExpired(token);
+    }
+
+    public boolean isRefreshTokenValid(String token) {
+        return "refresh".equals(extractClaim(token, c -> c.get("type", String.class)))
+                && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
