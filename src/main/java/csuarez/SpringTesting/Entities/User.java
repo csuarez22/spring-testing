@@ -1,47 +1,59 @@
 package csuarez.SpringTesting.Entities;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
-@Table (name = "users")
-public class User {
+@Table(name = "users")
+public class User implements UserDetails {
+
     @Id
     private String username;
 
-    @Column(name = "first_name")
-    private String firstname;
-    @Column(name = "last_name")
-    private String lastname;
     @Column(name = "date_of_birth", columnDefinition = "DATE")
     private LocalDate dateOfBirth;
     private String email;
     private String address;
-
-    @OneToOne(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
-    private ShoppingCart cart;
+    private String password;
 
     public User() {
         super();
     }
 
-    public User(String username, String firstname, String lastname, LocalDate dateOfBirth, String email, String address) {
-        super();
+    public User(String username, String firstname, String lastname, LocalDate dateOfBirth, String email, String address, String password) {
         this.username = username;
-        this.firstname = firstname;
-        this.lastname = lastname;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
         this.address = address;
+        this.password = password;
     }
 
-    public ShoppingCart getCart() {
-        return cart;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
     }
 
-    public void setCart(ShoppingCart cart) {
-        this.cart = cart;
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getAddress() {
@@ -66,29 +78,5 @@ public class User {
 
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 }

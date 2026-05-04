@@ -1,12 +1,12 @@
 package csuarez.SpringTesting.Logic;
 
 import csuarez.SpringTesting.Entities.User;
+import csuarez.SpringTesting.Logic.Interface.UserInterface;
 import csuarez.SpringTesting.Repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-
 
 @Service
 public class UserLogic implements UserInterface {

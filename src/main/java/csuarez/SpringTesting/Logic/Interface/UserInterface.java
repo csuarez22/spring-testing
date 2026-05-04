@@ -1,4 +1,4 @@
-package csuarez.SpringTesting.Logic;
+package csuarez.SpringTesting.Logic.Interface;
 
 import csuarez.SpringTesting.Entities.User;
 
