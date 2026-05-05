@@ -14,18 +14,18 @@ public class User implements UserDetails {
 
     @Id
     private String username;
+    private String password;
+    private String email;
 
+    private String address;
     @Column(name = "date_of_birth", columnDefinition = "DATE")
     private LocalDate dateOfBirth;
-    private String email;
-    private String address;
-    private String password;
 
     public User() {
         super();
     }
 
-    public User(String username, LocalDate dateOfBirth, String email, String address, String password) {
+    public User(String username, String password, String email, String address, LocalDate dateOfBirth) {
         this.username = username;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
@@ -39,8 +39,8 @@ public class User implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
-        return password;
+    public String getUsername() {
+        return username;
     }
 
     public void setUsername(String username) {
@@ -48,20 +48,12 @@ public class User implements UserDetails {
     }
 
     @Override
-    public String getUsername() {
-        return username;
+    public String getPassword() {
+        return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public String getEmail() {
@@ -70,6 +62,14 @@ public class User implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public LocalDate getDateOfBirth() {

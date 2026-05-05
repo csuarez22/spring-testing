@@ -5,12 +5,10 @@ import java.time.LocalDate;
 public class RegisterRequest {
 
     private String username;
-    private String firstname;
-    private String lastname;
-    private LocalDate dateOfBirth;
+    private String password;
     private String email;
     private String address;
-    private String password;
+    private LocalDate dateOfBirth;
 
     public String getUsername() {
         return username;
@@ -20,28 +18,12 @@ public class RegisterRequest {
         this.username = username;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getPassword() {
+        return password;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getEmail() {
@@ -60,11 +42,11 @@ public class RegisterRequest {
         this.address = address;
     }
 
-    public String getPassword() {
-        return password;
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 }

@@ -2,6 +2,8 @@ package csuarez.SpringTesting.Entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "refresh_token")
 public class RefreshToken {
@@ -9,9 +11,6 @@ public class RefreshToken {
     @Id
     private String username;
     private String token;
-
-    public RefreshToken() {
-    }
 
     public RefreshToken(String username, String token) {
         this.username = username;

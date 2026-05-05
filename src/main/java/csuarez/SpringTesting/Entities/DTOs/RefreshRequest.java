@@ -1,7 +1,6 @@
 package csuarez.SpringTesting.Entities.DTOs;
 
 public class RefreshRequest {
-
     private String refreshToken;
 
     public String getRefreshToken() {

@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -49,20 +51,19 @@ public class AuthLogic implements AuthInterface {
             }
             User user = new User(
                     request.getUsername(),
-                    request.getDateOfBirth(),
+                    passwordEncoder.encode(request.getPassword()),
                     request.getEmail(),
                     request.getAddress(),
-                    passwordEncoder.encode(request.getPassword())
+                    request.getDateOfBirth()
             );
 
-            String accessToken = jwtUtil.generateAccessToken(user);
             String refreshToken = jwtUtil.generateRefreshToken(user);
 
             userRepo.save(user);
             tokenRepo.save(new RefreshToken(user.getUsername(), refreshToken));
 
             return new AuthResponse(
-                    accessToken,
+                    jwtUtil.generateAccessToken(user),
                     refreshToken
             );
         } catch (Exception e) {
@@ -73,17 +74,27 @@ public class AuthLogic implements AuthInterface {
     @Override
     public AuthResponse login(AuthRequest request) {
         try {
-            authenticationManager.authenticate(
+            //throws exception if user isn't found or can't be authenticated for some reason
+            Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
             );
 
-            UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
+//            authenticate() returns 3 things
+//            auth.getPrincipal()    -> the logged-in user object — in your case, your User entity
+//            auth.getCredentials()  -> the password (usually nulled out after auth for security)
+//            auth.getAuthorities()  -> the roles/permissions, e.g. [ROLE_ADMIN]
+
+            UserDetails userDetails = (UserDetails) auth.getPrincipal(); //obtain user object
+            String refreshToken = jwtUtil.generateRefreshToken(userDetails);
+
+            //store refreshToken in database
+            tokenRepo.save(new RefreshToken(userDetails.getUsername(), refreshToken));
             return new AuthResponse(
                     jwtUtil.generateAccessToken(userDetails),
-                    jwtUtil.generateRefreshToken(userDetails)
+                    refreshToken
             );
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new BadCredentialsException(e.getMessage());
         }
     }
 
@@ -91,11 +102,19 @@ public class AuthLogic implements AuthInterface {
     public AuthResponse refreshToken(RefreshRequest request) {
         try {
             String refreshToken = request.getRefreshToken();
+
             if (!jwtUtil.isRefreshTokenValid(refreshToken)) {
                 throw UserException.refreshTokenExpired();
             }
 
             String username = jwtUtil.extractUsername(refreshToken);
+            RefreshToken storedToken = tokenRepo.findById(username)
+                    .orElseThrow(UserException::refreshTokenExpired);
+
+            if (!storedToken.getToken().equals(refreshToken)) {
+                throw UserException.refreshTokenExpired();
+            }
+
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             return new AuthResponse(
